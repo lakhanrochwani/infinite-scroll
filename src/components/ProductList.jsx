@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import mockProducts from '../Resources/mockProducts.json';
 import Product from './Product';
 
@@ -6,7 +6,9 @@ const ProductList = () => {
   const [visibleProducts, setVisibleProducts] = useState(
     mockProducts.slice(0, 5)
   );
+  const hasMore = visibleProducts.length < mockProducts.length;
   const sentinelRef = useRef(null);
+  
   // let count = visibleProducts.length;
 
   useEffect(() => {
@@ -32,9 +34,9 @@ const ProductList = () => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [visibleProducts.length, handleLoadMore]);
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     setVisibleProducts((currentProducts) => {
       // Have we already displayed every product?
       if (currentProducts.length >= mockProducts.length) {
@@ -50,7 +52,7 @@ const ProductList = () => {
       // Keep the existing products and append the new ones
       return [...currentProducts, ...nextProducts];
     });
-  };
+  },[]);
 
   return (
     <div className="product-list">
@@ -63,7 +65,7 @@ const ProductList = () => {
             quantity={product.quantity}
           />
         ))}
-      <div className="sentinel" ref={sentinelRef}></div>
+      {hasMore ? <div className="sentinel" ref={sentinelRef}></div> : <p>You have reached the end!</p>}
       {/* {count < mockProducts.length && (
         <button onClick={handleLoadMore}>Load More...</button>
       )} */}
