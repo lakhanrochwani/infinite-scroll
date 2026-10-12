@@ -6,11 +6,11 @@ const VirtualizedProductList = () => {
     const [scrollTop, setScrollTop] = useState(0)
     const containerHeight = 500;
     const itemHeight = 100;
-    const totalHeight = mockProducts.length * itemHeight;
+    const overScan = 2;
     const firstVisibleIndex = Math.floor(scrollTop/itemHeight);
     const visibleCount = Math.ceil(containerHeight/itemHeight);
-    const startIndex = firstVisibleIndex;
-    const endIndex = Math.min(startIndex + visibleCount,mockProducts.length);
+    const startIndex = Math.max(firstVisibleIndex - overScan,0);
+    const endIndex = Math.min(firstVisibleIndex + visibleCount + overScan,mockProducts.length);
     const visibleProducts = mockProducts.slice(startIndex, endIndex); 
     const topSpacerHeight = startIndex * itemHeight;
     const bottomSpacerHeight = (mockProducts.length - endIndex) * itemHeight;
@@ -24,9 +24,9 @@ const VirtualizedProductList = () => {
     return (
         <>
         <p>Scroll position : {scrollTop}px</p>
-        <p>First visible index : {firstVisibleIndex}</p>
-        <p>Last visible index : {endIndex}</p>
         <p>Product number : {firstVisibleIndex + 1}</p>
+        <p>First visible index : {firstVisibleIndex}</p>
+        <p>Last visible index: {firstVisibleIndex + visibleCount - 1}</p>
         <p>Visible count : {visibleCount}</p>
 
         <div onScroll={handleScroll} className="virtualized-container">
