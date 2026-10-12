@@ -35,10 +35,21 @@ const ProductList = () => {
   }, []);
 
   const handleLoadMore = () => {
-    setVisibleProducts((product) => [
-      ...product,
-      ...mockProducts.slice(product.length, product.length + 5),
-    ]);
+    setVisibleProducts((currentProducts) => {
+      // Have we already displayed every product?
+      if (currentProducts.length >= mockProducts.length) {
+        return currentProducts;
+      }
+  
+      // Find the next batch of 5 products
+      const nextProducts = mockProducts.slice(
+        currentProducts.length,
+        currentProducts.length + 5
+      );
+  
+      // Keep the existing products and append the new ones
+      return [...currentProducts, ...nextProducts];
+    });
   };
 
   return (
