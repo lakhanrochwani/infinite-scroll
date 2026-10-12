@@ -11,6 +11,24 @@ const ProductList = () => {
   
   // let count = visibleProducts.length;
 
+  const handleLoadMore = useCallback(() => {
+    setVisibleProducts((currentProducts) => {
+      // Have we already displayed every product?
+      if (currentProducts.length >= mockProducts.length) {
+        return currentProducts;
+      }
+  
+      // Find the next batch of 5 products
+      const nextProducts = mockProducts.slice(
+        currentProducts.length,
+        currentProducts.length + 5
+      );
+  
+      // Keep the existing products and append the new ones
+      return [...currentProducts, ...nextProducts];
+    });
+  },[]);
+
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
@@ -35,24 +53,6 @@ const ProductList = () => {
       observer.disconnect();
     };
   }, [visibleProducts.length, handleLoadMore]);
-
-  const handleLoadMore = useCallback(() => {
-    setVisibleProducts((currentProducts) => {
-      // Have we already displayed every product?
-      if (currentProducts.length >= mockProducts.length) {
-        return currentProducts;
-      }
-  
-      // Find the next batch of 5 products
-      const nextProducts = mockProducts.slice(
-        currentProducts.length,
-        currentProducts.length + 5
-      );
-  
-      // Keep the existing products and append the new ones
-      return [...currentProducts, ...nextProducts];
-    });
-  },[]);
 
   return (
     <div className="product-list">

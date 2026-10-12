@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Product = ({ name, price, quantity }) => {
+const Product = ({ index, name, price, quantity }) => {
   return (
     <div className="product">
       <p>
-        <strong>{name}</strong>
+        <strong>{name} - {index}</strong>
       </p>
       <p>Price: ${price}</p>
       <p>Quantity: {quantity}</p>
